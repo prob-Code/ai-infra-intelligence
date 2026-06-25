@@ -5,19 +5,19 @@ class PrometheusCollector:
 
     def __init__(self):
         self.prom = PrometheusConnect(
-            url="http://host.docker.internal:9090",
+            url="http://ai-prometheus:9090",
             disable_ssl=True
         )
 
     def get_cpu_usage(self):
 
         query = """
-        100 - (
-            avg by(instance)(
-                rate(node_cpu_seconds_total{mode="idle"}[5m])
-            ) * 100
-        )
-        """
+           100 - (
+            avg(
+              rate(node_cpu_seconds_total{mode="idle"}[1m])
+                ) * 100
+                 )
+                 """
 
         return self.prom.custom_query(query)
 

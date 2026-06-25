@@ -4,4 +4,5 @@ psycopg2-binary
 redis
 sqlalchemy
 python-dotenv
-prometheus-api-client
+prometheus-api-client
+requests
