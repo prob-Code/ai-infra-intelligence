@@ -7,13 +7,12 @@ from services.trend_service import get_recent_metrics
 from agents.health.analyzer import analyze_cluster
 from agents.health.recommender import recommend_actions
 from services.ai_service import run_ai_analysis
-from services.execute_service import execute_action
-from services.risk_service import calculate_risk
 from services.learn_service import save_learning_event
 from config.database import Base, engine
 from models.ai_event import AIEvent
 from services.dashboard_service import dashboard_summary
-
+from services.execute_service import execute_ai_action
+from services.risk_service import calculate_risk
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"

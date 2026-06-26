@@ -44,8 +44,4 @@ Return exactly this format:
   ]
 }}
 """
-    result = glm_analysis(prompt)
-
-    return {
-        "analysis": result
-    }
+    return glm_analysis(prompt)

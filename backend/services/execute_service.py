@@ -1,43 +1,28 @@
-from services.ai_service import run_ai_analysis
+def execute_ai_action(action: str):
 
-
-def execute_action():
-
-    result = run_ai_analysis()
-
-    analysis = result.get(
-        "analysis",
-        ""
-    ).lower()
-
-    if "provider error" in analysis:
-
+    if action == "Create Storage Alert":
         return {
-            "actions": [
-                "AI provider unavailable"
-            ]
+            "status": "success",
+            "executed": action,
+            "message": "Storage alert created."
         }
 
-    actions = []
+    elif action == "Notify Administrator":
+        return {
+            "status": "success",
+            "executed": action,
+            "message": "Administrator notified."
+        }
 
-    if "high" in analysis and "cpu" in analysis:
-
-        actions.append(
-            "Create CPU Alert"
-        )
-
-    if "disk" in analysis and "capacity" in analysis:
-
-        actions.append(
-            "Create Storage Alert"
-        )
-
-    if len(actions) == 0:
-
-        actions.append(
-            "No action required"
-        )
+    elif action == "Run Disk Cleanup Task":
+        return {
+            "status": "success",
+            "executed": action,
+            "message": "Disk cleanup started."
+        }
 
     return {
-        "actions": actions
+        "status": "ignored",
+        "executed": action,
+        "message": "Unknown action."
     }
