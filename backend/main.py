@@ -17,6 +17,8 @@ from pydantic import BaseModel
 from services.save_event_service import save_ai_event
 from services.history_service import get_history
 from services.incident_service import update_incident_status
+from services.learning_service import get_learning_statistics
+from services.memory_service import search_similar_incident
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"
@@ -131,6 +133,9 @@ class IncidentUpdateRequest(BaseModel):
     incident_id: str
     status: str
     resolution: str = ""
+class MemorySearchRequest(BaseModel):
+    root_cause: str
+
 @app.post("/execute-action")
 def execute_action_endpoint(request: ActionRequest):
 
@@ -157,4 +162,19 @@ def update_incident(request: IncidentUpdateRequest):
         incident_id=request.incident_id,
         status=request.status,
         resolution=request.resolution
+    )
+@app.get("/incident/stats")
+def incident_statistics():
+
+    return get_incident_statistics()
+@app.get("/learning/stats")
+def learning_statistics():
+
+
+    return get_learning_statistics()
+@app.post("/memory/search")
+def memory_search(request: MemorySearchRequest):
+
+    return search_similar_incident(
+        request.root_cause
     )

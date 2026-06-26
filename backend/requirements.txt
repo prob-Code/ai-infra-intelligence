@@ -6,3 +6,4 @@ sqlalchemy
 python-dotenv
 prometheus-api-client
 requests
+neo4j
