@@ -16,6 +16,7 @@ from services.risk_service import calculate_risk
 from pydantic import BaseModel
 from services.save_event_service import save_ai_event
 from services.history_service import get_history
+from services.incident_service import update_incident_status
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"
@@ -126,6 +127,10 @@ class SaveEventRequest(BaseModel):
     recommendation: str
     action: str
     status: str
+class IncidentUpdateRequest(BaseModel):
+    incident_id: str
+    status: str
+    resolution: str = ""
 @app.post("/execute-action")
 def execute_action_endpoint(request: ActionRequest):
 
@@ -145,3 +150,11 @@ def save_event_endpoint(request: SaveEventRequest):
 def history():
 
     return get_history()
+@app.post("/incident/update")
+def update_incident(request: IncidentUpdateRequest):
+
+    return update_incident_status(
+        incident_id=request.incident_id,
+        status=request.status,
+        resolution=request.resolution
+    )
