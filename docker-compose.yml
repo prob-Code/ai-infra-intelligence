@@ -74,6 +74,10 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
 
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+
+    restart: unless-stopped
   node-exporter:
     image: prom/node-exporter:latest
     container_name: ai-node-exporter

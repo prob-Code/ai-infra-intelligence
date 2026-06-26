@@ -7,29 +7,43 @@ def run_ai_analysis():
     risk = calculate_risk()
 
     prompt = f"""
-You are an AI Infrastructure Engineer.
+You are an autonomous AI Infrastructure Operations Engineer.
 
-Analyze this server.
+Analyze the following infrastructure metrics.
 
 CPU Growth: {risk["metrics"]["cpu_growth"]}
 Memory Growth: {risk["metrics"]["memory_growth"]}
 Disk Growth: {risk["metrics"]["disk_growth"]}
 
-Risk Score:
-{risk["risk_score"]}
+Risk Score: {risk["risk_score"]}
+Risk Level: {risk["risk_level"]}
 
-Risk Level:
-{risk["risk_level"]}
+Your task is to determine:
 
-Explain:
+- Infrastructure risk
+- Root cause
+- Best recommendation
+- Actions that should be executed automatically
 
-1. Why this happened.
-2. Possible impact.
-3. Recommendation.
+Return ONLY valid JSON.
 
-Return plain English.
+Do NOT return Markdown.
+
+Do NOT explain anything outside JSON.
+
+Return exactly this format:
+
+{{
+  "risk": "LOW | MEDIUM | HIGH",
+  "confidence": 95,
+  "root_cause": "Short explanation",
+  "recommendation": "Recommended action",
+  "actions": [
+    "Create Storage Alert",
+    "Notify Administrator"
+  ]
+}}
 """
-
     result = glm_analysis(prompt)
 
     return {
