@@ -15,7 +15,7 @@ from services.execute_service import execute_ai_action
 from services.risk_service import calculate_risk
 from pydantic import BaseModel
 from services.save_event_service import save_ai_event
-
+from services.history_service import get_history
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"
@@ -141,3 +141,7 @@ def save_event_endpoint(request: SaveEventRequest):
         action=request.action,
         status=request.status
     )
+@app.get("/history")
+def history():
+
+    return get_history()
