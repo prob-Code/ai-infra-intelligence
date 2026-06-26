@@ -1,17 +1,37 @@
-from agents.health.predictor import predict_resource_usage
-from agents.health.explainer import explain_cluster
-from agents.ai.infrastructure_agent import analyze_infrastructure
+from services.glm_service import glm_analysis
+from services.risk_service import calculate_risk
 
 
 def run_ai_analysis():
 
-    prediction = predict_resource_usage()
+    risk = calculate_risk()
 
-    explanation = explain_cluster()
+    prompt = f"""
+You are an AI Infrastructure Engineer.
 
-    payload = {
-        "prediction": prediction,
-        "explanation": explanation
+Analyze this server.
+
+CPU Growth: {risk["metrics"]["cpu_growth"]}
+Memory Growth: {risk["metrics"]["memory_growth"]}
+Disk Growth: {risk["metrics"]["disk_growth"]}
+
+Risk Score:
+{risk["risk_score"]}
+
+Risk Level:
+{risk["risk_level"]}
+
+Explain:
+
+1. Why this happened.
+2. Possible impact.
+3. Recommendation.
+
+Return plain English.
+"""
+
+    result = glm_analysis(prompt)
+
+    return {
+        "analysis": result
     }
-
-    return analyze_infrastructure(payload)

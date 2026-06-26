@@ -1,3 +1,4 @@
+from services.glm_service import glm_analysis
 from agents.health.explainer import explain_cluster
 from agents.health.predictor import predict_resource_usage
 from services.analysis_service import analyze_trends
@@ -110,3 +111,14 @@ def learn():
 def dashboard():
 
     return dashboard_summary()
+from pydantic import BaseModel
+
+
+class ActionRequest(BaseModel):
+    action: str
+
+
+@app.post("/execute-action")
+def execute_action_endpoint(request: ActionRequest):
+
+    return execute_ai_action(request.action)
