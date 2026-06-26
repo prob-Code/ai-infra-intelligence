@@ -13,6 +13,9 @@ from models.ai_event import AIEvent
 from services.dashboard_service import dashboard_summary
 from services.execute_service import execute_ai_action
 from services.risk_service import calculate_risk
+from pydantic import BaseModel
+from services.save_event_service import save_ai_event
+
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"
@@ -116,8 +119,25 @@ from pydantic import BaseModel
 class ActionRequest(BaseModel):
     action: str
 
-
+class SaveEventRequest(BaseModel):
+    risk: str
+    confidence: int
+    root_cause: str
+    recommendation: str
+    action: str
+    status: str
 @app.post("/execute-action")
 def execute_action_endpoint(request: ActionRequest):
 
     return execute_ai_action(request.action)
+@app.post("/save-ai-event")
+def save_event_endpoint(request: SaveEventRequest):
+
+    return save_ai_event(
+        risk=request.risk,
+        confidence=request.confidence,
+        root_cause=request.root_cause,
+        recommendation=request.recommendation,
+        action=request.action,
+        status=request.status
+    )

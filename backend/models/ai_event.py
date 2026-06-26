@@ -10,12 +10,16 @@ class AIEvent(Base):
 
     id = Column(Integer, primary_key=True)
 
-    prediction = Column(String)
+    risk = Column(String)
+
+    confidence = Column(Integer)
+
+    root_cause = Column(String)
 
     recommendation = Column(String)
 
     action = Column(String)
 
-    risk_level = Column(String)
+    status = Column(String)
 
     timestamp = Column(DateTime, default=datetime.utcnow)
