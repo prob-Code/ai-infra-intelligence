@@ -1,48 +1,39 @@
 import os
-import requests
+from openai import OpenAI
 from dotenv import load_dotenv
-import json
-from models.ai_response import AIResponse
 
+from models.ai_response import AIResponse
 from utils.json_parser import extract_json
+
 load_dotenv()
 
-HF_TOKEN = os.getenv("HF_TOKEN")
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 
-URL = "https://router.huggingface.co/v1/chat/completions"
+MODEL = os.getenv("OPENAI_MODEL", "gpt-5.5")
 
 
 def glm_analysis(prompt: str):
 
-    headers = {
-        "Authorization": f"Bearer {HF_TOKEN}",
-        "Content-Type": "application/json",
-    }
+    response = client.chat.completions.create(
+    model=MODEL,
+    messages=[
+        {
+            "role": "system",
+            "content": (
+                "You are an AI Infrastructure Operations Engineer. "
+                "Always return ONLY valid JSON."
+            ),
+        },
+        {
+            "role": "user",
+            "content": prompt,
+        },
+    ]
+)
 
-    payload = {
-        "model": "zai-org/GLM-5.2",
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-    }
-
-
-    response = requests.post(
-        URL,
-        headers=headers,
-        json=payload,
-        timeout=60,
-    )
-
-
-    response.raise_for_status()
-
-    data = response.json()
-
-    content = data["choices"][0]["message"]["content"]
+    content = response.choices[0].message.content
 
     parsed = extract_json(content)
 
