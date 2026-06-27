@@ -19,7 +19,6 @@ from services.history_service import get_history
 from services.incident_service import update_incident_status
 from services.learning_service import get_learning_statistics
 from services.memory_service import search_similar_incident
-from services.hybrid_ai_service import hybrid_ai_engine
 app = FastAPI(
     title="AI Infrastructure Intelligence Platform",
     version="1.0.0"
@@ -134,10 +133,6 @@ class IncidentUpdateRequest(BaseModel):
     incident_id: str
     status: str
     resolution: str = ""
-class MemorySearchRequest(BaseModel):
-    root_cause: str
-class HybridRequest(BaseModel):
-    root_cause: str
 @app.post("/execute-action")
 def execute_action_endpoint(request: ActionRequest):
 
@@ -174,15 +169,3 @@ def learning_statistics():
 
 
     return get_learning_statistics()
-@app.post("/memory/search")
-def memory_search(request: MemorySearchRequest):
-
-    return search_similar_incident(
-        request.root_cause
-    )
-@app.post("/ai/hybrid")
-def hybrid_ai(request: HybridRequest):
-
-    return hybrid_ai_engine(
-        request.root_cause
-    )
